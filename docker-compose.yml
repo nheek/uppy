@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  node-app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3034:3000"
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    environment:
+      - PLACEHOLDER=YES
+    image: "nheek/sipscore:latest"
+
+  postgres:
+    image: postgres:latest
+    restart: unless-stopped
+    ports:
+      - 4034:3306
+    env_file:
+      - .env
+    environment:
+      PLACEHOLDER: "YES"
+    volumes:
+      - postgres_db_data:/var/lib/postgresql/data
+      - .sql_data:/docker-entrypoint-initdb.d/
+
+volumes:
+  postgres_db_data:
