@@ -1,7 +1,9 @@
+"use client"; // Ensure this is included
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Cookies from "js-cookie";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation"; // Use next/navigation for client components
 
 const Index = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

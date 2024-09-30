@@ -1,4 +1,6 @@
-import FileUpload from "@/components/FileUpload/FileUpload";
+"use client";
+
+import FileUpload from "@/app/components/FileUpload/FileUpload";
 
 export default function LoginIndex() {
   return (
