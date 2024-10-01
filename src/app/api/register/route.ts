@@ -1,5 +1,3 @@
-// src/app/api/register/route.ts
-
 import { pool } from "@/app/api/config";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
@@ -8,11 +6,19 @@ const saltRounds = 10;
 
 // POST method handler
 export async function POST(req: NextRequest) {
-  const { username, password } = await req.json(); // Use .json() to parse the request body
+  const { username, password, confirmPassword } = await req.json(); // Use .json() to parse the request body
 
-  if (!username || !password) {
+  if (!username || !password || !confirmPassword) {
     return NextResponse.json(
-      { message: "Username and password are required" },
+      { message: "Username, password, and confirm password are required" },
+      { status: 400 }
+    );
+  }
+
+  // Check if passwords match
+  if (password !== confirmPassword) {
+    return NextResponse.json(
+      { message: "Passwords do not match" },
       { status: 400 }
     );
   }

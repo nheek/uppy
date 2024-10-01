@@ -20,7 +20,7 @@ const Login = () => {
 
     if (response.ok) {
       const { token } = await response.json();
-      Cookies.set("token", token, { expires: 1 });  // Set token in cookie for 1 day
+      Cookies.set("token", token, { expires: 15 }); // Set token in cookie for 1 day
       router.push("/"); // Redirect to homepage
     } else {
       alert("Login failed. Please check your credentials.");
@@ -29,31 +29,31 @@ const Login = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <form onSubmit={handleLogin} className="bg-white p-8 rounded shadow-md">
-        <h1 className="text-2xl mb-6">Login</h1>
-        <div className="mb-4">
-          <label className="block mb-2" htmlFor="username">Username</label>
+      <form onSubmit={handleLogin} className="w-[400px] p-8 rounded-md shadow-md border-2 border-white border-opacity-50">
+        <h1 className="text-2xl mb-8">Login</h1>
+        <div className="mb-8">
+          <label htmlFor="username">Username</label>
           <input
             type="text"
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="border rounded p-2 w-full"
+            className="bg-transparent border-b-2 border-gray-300 border-opacity-50 px-2 w-full"
             required
           />
         </div>
-        <div className="mb-4">
-          <label className="block mb-2" htmlFor="password">Password</label>
+        <div className="mb-8">
+          <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="border rounded p-2 w-full"
+            className="bg-transparent border-b-2 border-gray-300 border-opacity-50 px-2 w-full"
             required
           />
         </div>
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+        <button type="submit" className="bg-blue-500 text-white mt-2 p-2 rounded">
           Login
         </button>
       </form>
