@@ -6,6 +6,18 @@ const FileUpload = () => {
   const [fileUrl, setFileUrl] = useState<string | null>(null); // Relative URL for the file
   const [fullUrl, setFullUrl] = useState<string | null>(null); // Full URL for sharing
 
+  // Check if user is logged in
+  const isLoggedIn = !!Cookies.get("token");
+
+  // Render a message if the user is not logged in
+  if (!isLoggedIn) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-6">
+        <p className="text-xl mb-4 font-bold text-red-600">You must be logged in to upload files.</p>
+      </div>
+    );
+  }
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setSelectedFile(e.target.files[0]);
@@ -15,15 +27,15 @@ const FileUpload = () => {
   const handleFileUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedFile) {
-        alert("Please select a file.");
-        return;
+      alert("Please select a file.");
+      return;
     }
 
     // Validate file size (10 MB limit)
     const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
     if (selectedFile.size > MAX_SIZE) {
-        alert("File size exceeds the 10 MB limit.");
-        return;
+      alert("File size exceeds the 10 MB limit.");
+      return;
     }
 
     const formData = new FormData();
@@ -57,13 +69,13 @@ const FileUpload = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+    <div className="flex flex-col items-center justify-center min-h-screen p-6">
       <h1 className="text-4xl mb-4 font-bold text-blue-600">Upload your files</h1>
       <form onSubmit={handleFileUpload} className="mb-4 flex flex-col items-center">
         <input
           type="file"
           onChange={handleFileChange}
-          className="mb-4 border border-blue-500 rounded p-2"
+          className="mb-4 border border-blue-500 rounded p-2 text-white"
         />
         <button type="submit" className="bg-blue-500 text-white p-2 rounded shadow hover:bg-blue-600 transition">
           Upload File
@@ -73,11 +85,14 @@ const FileUpload = () => {
       {/* Display the uploaded file URL and preview */}
       {fileUrl && (
         <div className="mt-4 p-4 bg-white shadow rounded">
-          <h2 className="text-lg font-semibold">File uploaded!</h2>
+          <h2 className="text-lg font-semibold text-black text-opacity-40">File uploaded!</h2>
           <a href={fileUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
             Click here to download/view your file
           </a>
-          <button onClick={copyToClipboard} className="ml-4 bg-gray-200 text-black p-1 rounded shadow hover:bg-gray-300">
+          <button
+            onClick={copyToClipboard}
+            className="block mt-2 bg-gray-200 text-black p-1 rounded shadow hover:bg-gray-300"
+          >
             Copy Shareable Link
           </button>
           {/* Preview for image files */}

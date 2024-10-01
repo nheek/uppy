@@ -20,6 +20,18 @@ const MyFiles = () => {
   const [message, setMessage] = useState<string | null>(null);
   const inputFileRef = useRef<HTMLInputElement | null>(null);
 
+  // Check if user is logged in
+  const isLoggedIn = !!Cookies.get("token");
+
+  // Render a message if the user is not logged in
+  if (!isLoggedIn) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-6">
+        <p className="text-xl mb-4 font-bold text-red-300">You must be logged in to view your files.</p>
+      </div>
+    );
+  }
+
   useEffect(() => {
     fetchFiles();
   }, []);
@@ -123,7 +135,7 @@ const MyFiles = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100 p-6">
+    <div className="flex flex-col min-h-screen p-6">
       <h1 className="text-4xl mb-4 font-bold text-blue-600">My Files</h1>
       {message && <p className="text-green-600">{message}</p>}
 
@@ -132,8 +144,8 @@ const MyFiles = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {files.map((file) => (
-            <div key={file.id} className="p-4 bg-white shadow rounded border text-black">
-              <p className="font-semibold mb-2">{file.original_name}</p>
+            <div key={file.id} className="p-4 shadow rounded border-2 border-white border-opacity-50 text-black">
+              <p className="font-semibold mb-4 text-gray-200">{file.original_name}</p>
               {renderFilePreview(file)} {/* Render preview */}
               <div className="mt-4 flex items-center justify-center gap-4">
                 <a
