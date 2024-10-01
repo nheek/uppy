@@ -45,7 +45,7 @@ const Register = () => {
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="bg-transparent border-b-2 border-gray-300 border-opacity-50 px-2 w-full"
+            className="bg-transparent focus:outline-none border-b-2 border-gray-300 border-opacity-50 py-1 px-2 w-full"
             required
           />
         </div>
@@ -56,7 +56,7 @@ const Register = () => {
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="bg-transparent border-b-2 border-gray-300 border-opacity-50 px-2 w-full"
+            className="bg-transparent focus:outline-none border-b-2 border-gray-300 border-opacity-50 py-1 px-2 w-full"
             required
           />
         </div>
@@ -67,7 +67,7 @@ const Register = () => {
             id="confirmPassword"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="bg-transparent border-b-2 border-gray-300 border-opacity-50 px-2 w-full"
+            className="bg-transparent focus:outline-none border-b-2 border-gray-300 border-opacity-50 py-1 px-2 w-full"
             required
           />
         </div>
