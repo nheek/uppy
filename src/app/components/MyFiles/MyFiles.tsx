@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faCopy, faCrop, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faCopy, faCrop, faEye, faFileAlt } from '@fortawesome/free-solid-svg-icons';
 
 interface File {
   id: number;
@@ -123,7 +123,7 @@ const MyFiles = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+    <div className="flex flex-col min-h-screen bg-gray-100 p-6">
       <h1 className="text-4xl mb-4 font-bold text-blue-600">My Files</h1>
       {message && <p className="text-green-600">{message}</p>}
 
@@ -132,29 +132,29 @@ const MyFiles = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {files.map((file) => (
-            <div key={file.id} className="p-4 bg-white shadow rounded border">
-              <p className="font-semibold">{file.original_name}</p>
+            <div key={file.id} className="p-4 bg-white shadow rounded border text-black">
+              <p className="font-semibold mb-2">{file.original_name}</p>
               {renderFilePreview(file)} {/* Render preview */}
-              <div className="mt-2 flex items-center justify-center gap-4">
+              <div className="mt-4 flex items-center justify-center gap-4">
                 <a
                   href={`/uploads/${file.saved_name}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 p-1 rounded shadow hover:bg-blue-100 transition"
+                  className="text-blue-600 py-1 px-2 rounded hover:bg-blue-100 transition"
                   title="Open File"
                 >
                   <FontAwesomeIcon icon={faEye} className="text-blue-600" />
                 </a>
                 <button
                   onClick={() => deleteFile(file.id, file.saved_name)}
-                  className="p-1 rounded shadow hover:bg-red-100 transition"
+                  className="py-1 px-2 rounded hover:bg-red-100 transition"
                   title="Delete"
                 >
                   <FontAwesomeIcon icon={faTrash} className="text-red-500" />
                 </button>
                 <button
                   onClick={() => copyToClipboard(`/uploads/${file.saved_name}`)}
-                  className="p-1 rounded shadow hover:bg-gray-200 transition"
+                  className="py-1 px-2 rounded hover:bg-gray-200 transition"
                   title="Copy Shareable Link"
                 >
                   <FontAwesomeIcon icon={faCopy} className="text-gray-500" />
@@ -163,7 +163,7 @@ const MyFiles = () => {
                 {file.saved_name.endsWith(".jpg") || file.saved_name.endsWith(".png") ? (
                   <button
                     onClick={() => setSelectedFile(`/uploads/${file.saved_name}`)}
-                    className="p-1 rounded shadow hover:bg-blue-100 transition"
+                    className="py-1 px-2 rounded hover:bg-blue-100 transition"
                     title="Edit (Crop)"
                   >
                     <FontAwesomeIcon icon={faCrop} className="text-blue-500" />

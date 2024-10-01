@@ -38,13 +38,32 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: "No file uploaded" }, { status: 400 });
     }
 
+    // Validate file type (common image and document types)
+    const allowedTypes = [
+      'image/jpeg', 
+      'image/png', 
+      'image/gif', 
+      'application/pdf', 
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // DOCX
+    ];
+    
+    if (!allowedTypes.includes(file.type)) {
+      return NextResponse.json({ message: "Invalid file type" }, { status: 400 });
+    }
+
+    // Validate file size (10 MB limit)
+    const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
+    if (file.size > MAX_SIZE) {
+        return NextResponse.json({ message: "File size exceeds the 10 MB limit" }, { status: 400 });
+    }
+
     // Prepare the directory to store the uploaded files
     const uploadDir = path.join(process.cwd(), 'public', 'uploads');
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
 
-    const originalName = file.name;
+    const originalName = path.basename(file.name); // Sanitize the file name
     const savedName = `${uuidv4()}${path.extname(originalName)}`;
     const filePath = path.join(uploadDir, savedName);
 
@@ -71,8 +90,6 @@ export async function POST(request: Request) {
       fileUrl,
       fullUrl,
     }, { status: 201 });
-
-
 
   } catch (error) {
     console.error("Error handling file upload:", error);

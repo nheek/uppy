@@ -15,8 +15,15 @@ const FileUpload = () => {
   const handleFileUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedFile) {
-      alert("Please select a file.");
-      return;
+        alert("Please select a file.");
+        return;
+    }
+
+    // Validate file size (10 MB limit)
+    const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
+    if (selectedFile.size > MAX_SIZE) {
+        alert("File size exceeds the 10 MB limit.");
+        return;
     }
 
     const formData = new FormData();
