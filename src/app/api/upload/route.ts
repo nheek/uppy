@@ -1,27 +1,23 @@
-// src/app/api/upload/route.ts
-
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { pool } from "@/app/api/config";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from 'uuid';
-import formidable from 'formidable';
 import fs from 'fs';
 import path from 'path';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Enable formidable to parse incoming form data
+// Disable body parsing by Next.js, since we'll handle it
 export const config = {
   api: {
     bodyParser: false,
   },
 };
 
-// POST method handler
-export async function POST(req: NextRequest) {
+export async function POST(request: Request) {
   try {
-    // Authorization token validation
-    const authHeader = req.headers.get('authorization');
+    // Verify the JWT token
+    const authHeader = request.headers.get('authorization');
     const token = authHeader?.split(' ')[1];
 
     if (!token) {
@@ -34,54 +30,50 @@ export async function POST(req: NextRequest) {
 
     const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
 
-    // Setup upload directory
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-
-    // Initialize IncomingForm
-    const form = new formidable.IncomingForm({
-      uploadDir,
-      keepExtensions: true,
-    });
-
-    // Parse the form using formidable
-    const parsedFiles = await new Promise((resolve, reject) => {
-      form.parse(req as any, (err, fields, files) => { // Type assertion here
-        if (err) {
-          reject(err);
-        } else {
-          resolve(files);
-        }
-      });
-    });
-
-    const file = parsedFiles.file[0];
+    // Parse formData from the request
+    const formData = await request.formData();
+    const file = formData.get('file') as File | null;
 
     if (!file) {
       return NextResponse.json({ message: "No file uploaded" }, { status: 400 });
     }
 
-    const originalName = file.originalFilename || 'unknown';
+    // Prepare the directory to store the uploaded files
+    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    const originalName = file.name;
     const savedName = `${uuidv4()}${path.extname(originalName)}`;
     const filePath = path.join(uploadDir, savedName);
 
-    // Rename the uploaded file to the target directory
-    fs.renameSync(file.filepath, filePath);
+    // Save the uploaded file to the filesystem
+    const arrayBuffer = await file.arrayBuffer();
+    fs.writeFileSync(filePath, Buffer.from(arrayBuffer));
 
-    const fileUrl = uuidv4(); // Generate a unique file URL
+    // Generate a unique URL for the file
+    const fileUrlUnique = uuidv4();
+
+    // Insert file data into the database
     const query = `
       INSERT INTO "Files" (user_id, original_name, saved_name, file_url)
       VALUES ($1, $2, $3, $4);
     `;
+    await pool.query(query, [decoded.id, originalName, savedName, fileUrlUnique]);
 
-    await pool.query(query, [decoded.id, originalName, savedName, fileUrl]);
+    const domain = process.env.DOMAIN || 'http://localhost:3034'; // Production domain should be used in deployment
+    const fileUrl = `/uploads/${savedName}`; // Relative URL for preview
+    const fullUrl = `${domain}${fileUrl}`; // Full URL for sharing
 
     return NextResponse.json({
       message: "File uploaded successfully",
-      fileUrl: `/uploads/${savedName}`,
+      fileUrl,
+      fullUrl,
     }, { status: 201 });
+
+
+
   } catch (error) {
     console.error("Error handling file upload:", error);
     return NextResponse.json({ message: "Internal server error" }, { status: 500 });

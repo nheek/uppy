@@ -3,7 +3,8 @@ import Cookies from "js-cookie";
 
 const FileUpload = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [fileUrl, setFileUrl] = useState<string | null>(null); // State for the file URL
+  const [fileUrl, setFileUrl] = useState<string | null>(null); // Relative URL for the file
+  const [fullUrl, setFullUrl] = useState<string | null>(null); // Full URL for sharing
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -31,12 +32,20 @@ const FileUpload = () => {
     });
 
     if (response.ok) {
-      const { fileUrl } = await response.json();
-      setFileUrl(fileUrl); // Set the file URL state
+      const { fileUrl, fullUrl } = await response.json();
+      setFileUrl(fileUrl); // Set the relative URL for the file preview
+      setFullUrl(fullUrl); // Set the full URL for sharing
       alert("File uploaded successfully");
     } else {
       const errorMessage = await response.json();
       alert(`File upload failed: ${errorMessage.message}`);
+    }
+  };
+
+  const copyToClipboard = () => {
+    if (fullUrl) {
+      navigator.clipboard.writeText(fullUrl);
+      alert("Link copied to clipboard!");
     }
   };
 
@@ -61,6 +70,9 @@ const FileUpload = () => {
           <a href={fileUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
             Click here to download/view your file
           </a>
+          <button onClick={copyToClipboard} className="ml-4 bg-gray-200 text-black p-1 rounded shadow hover:bg-gray-300">
+            Copy Shareable Link
+          </button>
           {/* Preview for image files */}
           {selectedFile?.type.startsWith('image/') && (
             <div className="mt-2">
