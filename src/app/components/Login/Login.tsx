@@ -20,8 +20,8 @@ const Login = () => {
 
     if (response.ok) {
       const { token } = await response.json();
-      Cookies.set("token", token, { expires: 15 }); // Set token in cookie for 1 day
-      router.push("/"); // Redirect to homepage
+      Cookies.set("token", token, { expires: 15 });
+      router.push("/");
     } else {
       alert("Login failed. Please check your credentials.");
     }
