@@ -7,13 +7,6 @@ import path from "path";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Disable body parsing by Next.js, since we'll handle it
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 export async function POST(request: Request) {
   try {
     // Verify the JWT token

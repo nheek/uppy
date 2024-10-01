@@ -22,9 +22,7 @@ const MyFiles = () => {
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const [cropData, setCropData] = useState<string | null>(null);
   const [cropper, setCropper] = useState<Cropper | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string | null>(null);
-  const inputFileRef = useRef<HTMLInputElement | null>(null);
 
   // Check if user is logged in
   const isLoggedIn = !!Cookies.get("token");

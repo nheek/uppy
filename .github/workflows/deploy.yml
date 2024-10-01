@@ -1,0 +1,61 @@
+name: Production - Build, Push, and Deploy Docker Compose
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-push-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Generate .env file
+        run: |
+          echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .env
+          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
+          echo "POSTGRES_URL=${{ secrets.POSTGRES_URL }}" >> .env
+          echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "DOMAIN=${{ secrets.DOMAIN }}" >> .env
+
+      - name: Build and Push Docker Images
+        run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+          docker compose build
+          docker compose push
+
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd apps
+            mkdir uppy
+            cd uppy
+
+            rm -rf .env
+            echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .env
+            echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
+            echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
+            echo "POSTGRES_URL=${{ secrets.POSTGRES_URL }}" >> .env
+            echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> .env
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+            curl -H "Authorization: token ${{ secrets.PERSONAL_ACCESS_TOKEN }}" -O -L https://raw.githubusercontent.com/nheek/uppy/main/Dockerfile
+            curl -H "Authorization: token ${{ secrets.PERSONAL_ACCESS_TOKEN }}" -O -L https://raw.githubusercontent.com/nheek/uppy/main/docker-compose.yml
+
+            mkdir .sql_data
+            cd .sql_data
+            curl -H "Authorization: token ${{ secrets.PERSONAL_ACCESS_TOKEN }}" -O -L https://raw.githubusercontent.com/nheek/uppy/main/.sql_data/create_database.sql
+
+            docker pull nheek/uppy:latest
+            docker compose up -d
