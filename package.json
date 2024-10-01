@@ -9,7 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "bcryptjs": "^2.4.3",
+    "cropperjs": "^1.6.2",
     "dotenv": "^16.4.5",
     "formidable": "^3.5.1",
     "fs": "^0.0.1-security",
@@ -18,6 +21,7 @@
     "next": "14.2.13",
     "pg": "^8.13.0",
     "react": "^18",
+    "react-cropper": "^2.3.3",
     "react-dom": "^18",
     "uuid": "^10.0.0"
   },
