@@ -13,6 +13,8 @@ services:
     environment:
       - PLACEHOLDER=YES
     image: "nheek/uppy:latest"
+    volumes:
+      - ./uploads:/app/public/uploads
 
   postgres:
     image: postgres:latest
