@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Login from "@/app/components/Login/Login";
 import Header from "@/app/components/Header/Header";

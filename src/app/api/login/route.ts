@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   if (!username || !password) {
     return NextResponse.json(
       { message: "Username and password are required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     if (rows.length === 0) {
       return NextResponse.json(
         { message: "Invalid credentials" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -39,27 +39,27 @@ export async function POST(req: NextRequest) {
     if (!isMatch) {
       return NextResponse.json(
         { message: "Invalid credentials" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
     // Create JWT token
     const token = jwt.sign({ id: user.id }, JWT_SECRET!, { expiresIn: "1h" });
 
-    return NextResponse.json(
-      { token },
-      { status: 200 }
-    );
+    return NextResponse.json({ token }, { status: 200 });
   } catch (error) {
     console.error("Error logging in user:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 // Optionally, you can export other methods if needed
 export async function GET() {
-  return NextResponse.json({ message: "GET method not supported" }, { status: 405 });
+  return NextResponse.json(
+    { message: "GET method not supported" },
+    { status: 405 },
+  );
 }

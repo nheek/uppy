@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { NextResponse } from "next/server";
+import fs from "fs";
+import path from "path";
 
 export const POST = async (request: Request) => {
   try {
@@ -9,10 +9,10 @@ export const POST = async (request: Request) => {
 
     // Decode the base64 image string
     const base64Data = croppedImage.replace(/^data:image\/\w+;base64,/, "");
-    const buffer = Buffer.from(base64Data, 'base64');
+    const buffer = Buffer.from(base64Data, "base64");
 
     // Define the upload directory
-    const uploadDir = path.join(process.cwd(), 'public/uploads');
+    const uploadDir = path.join(process.cwd(), "public/uploads");
     const filePath = path.join(uploadDir, savedName);
 
     // Ensure the directory exists
@@ -21,9 +21,14 @@ export const POST = async (request: Request) => {
     // Save the cropped image
     fs.writeFileSync(filePath, buffer);
 
-    return NextResponse.json({ message: 'Cropped image uploaded successfully' });
+    return NextResponse.json({
+      message: "Cropped image uploaded successfully",
+    });
   } catch (error) {
-    console.error('Error uploading cropped image:', error);
-    return NextResponse.json({ message: 'Failed to upload cropped image' }, { status: 500 });
+    console.error("Error uploading cropped image:", error);
+    return NextResponse.json(
+      { message: "Failed to upload cropped image" },
+      { status: 500 },
+    );
   }
 };

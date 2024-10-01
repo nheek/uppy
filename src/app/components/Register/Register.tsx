@@ -9,13 +9,13 @@ const Register = () => {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     // Check if passwords match
     if (password !== confirmPassword) {
       alert("Passwords do not match.");
       return;
     }
-  
+
     const response = await fetch("/api/register", {
       method: "POST",
       headers: {
@@ -23,7 +23,7 @@ const Register = () => {
       },
       body: JSON.stringify({ username, password, confirmPassword }), // Include confirmPassword in the request
     });
-  
+
     if (response.ok) {
       alert("Registration successful!");
       router.push("/login"); // Redirect to login page
@@ -32,11 +32,13 @@ const Register = () => {
       alert(`Registration failed: ${errorData.message}`);
     }
   };
-  
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <form onSubmit={handleRegister} className="w-[400px] p-8 rounded-md shadow-md border-2 border-white border-opacity-50">
+      <form
+        onSubmit={handleRegister}
+        className="w-[400px] p-8 rounded-md shadow-md border-2 border-white border-opacity-50"
+      >
         <h1 className="text-2xl mb-8">Register</h1>
         <div className="mb-8">
           <label htmlFor="username">Username</label>
@@ -71,7 +73,10 @@ const Register = () => {
             required
           />
         </div>
-        <button type="submit" className="bg-blue-500 text-white mt-2 p-2 rounded">
+        <button
+          type="submit"
+          className="bg-blue-500 text-white mt-2 p-2 rounded"
+        >
           Register
         </button>
       </form>

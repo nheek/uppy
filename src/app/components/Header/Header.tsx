@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 
 const Header = () => {
   const router = useRouter();
-  
+
   // Check if the user is logged in by checking for the presence of a token
   const isLoggedIn = !!Cookies.get("token");
 
@@ -17,27 +17,40 @@ const Header = () => {
   return (
     <header className="bg-blue-600 text-white p-4">
       <div className="flex justify-between items-center container mx-auto">
-        <h1 className="text-xl font-bold cursor-pointer" onClick={() => router.push("/")}>
+        <h1
+          className="text-xl font-bold cursor-pointer"
+          onClick={() => router.push("/")}
+        >
           Uppy
         </h1>
         <nav>
           <ul className="flex space-x-4">
             <li>
-              <a href="/" className="hover:underline">Home</a>
+              <a href="/" className="hover:underline">
+                Home
+              </a>
             </li>
             <li>
-              <a href="/file-upload" className="hover:underline">Upload File</a>
+              <a href="/file-upload" className="hover:underline">
+                Upload File
+              </a>
             </li>
             <li>
-              <a href="/my-files" className="hover:underline">My Files</a>
+              <a href="/my-files" className="hover:underline">
+                My Files
+              </a>
             </li>
             {!isLoggedIn ? (
               <>
                 <li>
-                  <a href="/register" className="hover:underline">Register</a>
+                  <a href="/register" className="hover:underline">
+                    Register
+                  </a>
                 </li>
                 <li>
-                  <a href="/login" className="hover:underline">Login</a>
+                  <a href="/login" className="hover:underline">
+                    Login
+                  </a>
                 </li>
               </>
             ) : (

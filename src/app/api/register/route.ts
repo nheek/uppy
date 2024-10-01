@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   if (!username || !password || !confirmPassword) {
     return NextResponse.json(
       { message: "Username, password, and confirm password are required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
   if (password !== confirmPassword) {
     return NextResponse.json(
       { message: "Passwords do not match" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -35,13 +35,13 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       { id: rows[0].id, username: rows[0].username },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error("Error registering user:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

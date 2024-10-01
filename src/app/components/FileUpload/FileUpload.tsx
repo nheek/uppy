@@ -13,7 +13,9 @@ const FileUpload = () => {
   if (!isLoggedIn) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-6">
-        <p className="text-xl mb-4 font-bold text-red-600">You must be logged in to upload files.</p>
+        <p className="text-xl mb-4 font-bold text-red-600">
+          You must be logged in to upload files.
+        </p>
       </div>
     );
   }
@@ -70,14 +72,22 @@ const FileUpload = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6">
-      <h1 className="text-4xl mb-4 font-bold text-blue-600">Upload your files</h1>
-      <form onSubmit={handleFileUpload} className="mb-4 flex flex-col items-center">
+      <h1 className="text-4xl mb-4 font-bold text-blue-600">
+        Upload your files
+      </h1>
+      <form
+        onSubmit={handleFileUpload}
+        className="mb-4 flex flex-col items-center"
+      >
         <input
           type="file"
           onChange={handleFileChange}
           className="mb-4 border border-blue-500 rounded p-2 text-white"
         />
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded shadow hover:bg-blue-600 transition">
+        <button
+          type="submit"
+          className="bg-blue-500 text-white p-2 rounded shadow hover:bg-blue-600 transition"
+        >
           Upload File
         </button>
       </form>
@@ -85,8 +95,15 @@ const FileUpload = () => {
       {/* Display the uploaded file URL and preview */}
       {fileUrl && (
         <div className="mt-4 p-4 bg-white shadow rounded">
-          <h2 className="text-lg font-semibold text-black text-opacity-40">File uploaded!</h2>
-          <a href={fileUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+          <h2 className="text-lg font-semibold text-black text-opacity-40">
+            File uploaded!
+          </h2>
+          <a
+            href={fileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline"
+          >
             Click here to download/view your file
           </a>
           <button
@@ -96,9 +113,13 @@ const FileUpload = () => {
             Copy Shareable Link
           </button>
           {/* Preview for image files */}
-          {selectedFile?.type.startsWith('image/') && (
+          {selectedFile?.type.startsWith("image/") && (
             <div className="mt-2">
-              <img src={fileUrl} alt="Uploaded file" className="w-64 h-auto border rounded shadow" />
+              <img
+                src={fileUrl}
+                alt="Uploaded file"
+                className="w-64 h-auto border rounded shadow"
+              />
             </div>
           )}
         </div>

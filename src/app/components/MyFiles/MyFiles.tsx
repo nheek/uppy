@@ -2,8 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import Cookies from "js-cookie";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faCopy, faCrop, faEye, faFileAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTrash,
+  faCopy,
+  faCrop,
+  faEye,
+  faFileAlt,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface File {
   id: number;
@@ -27,7 +33,9 @@ const MyFiles = () => {
   if (!isLoggedIn) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-6">
-        <p className="text-xl mb-4 font-bold text-red-300">You must be logged in to view your files.</p>
+        <p className="text-xl mb-4 font-bold text-red-300">
+          You must be logged in to view your files.
+        </p>
       </div>
     );
   }
@@ -86,7 +94,7 @@ const MyFiles = () => {
       },
       body: JSON.stringify({ croppedImage: base64Image, savedName }),
     });
-  
+
     if (response.ok) {
       setMessage("Cropped image saved successfully!");
       fetchFiles(); // Refresh file list
@@ -94,7 +102,7 @@ const MyFiles = () => {
       setMessage("Failed to save cropped image.");
     }
   };
-  
+
   const getCropData = () => {
     if (cropper) {
       const croppedImage = cropper.getCroppedCanvas().toDataURL();
@@ -104,15 +112,21 @@ const MyFiles = () => {
   };
 
   const renderFilePreview = (file: File) => {
-    const fileExtension = file.saved_name.split('.').pop()?.toLowerCase();
-    
+    const fileExtension = file.saved_name.split(".").pop()?.toLowerCase();
+
     // Define a fixed size for the previews
     const previewSize = "w-full h-40";
 
     // Check if it's an image
     if (fileExtension === "jpg" || fileExtension === "png") {
-      return <img src={`/uploads/${file.saved_name}`} alt="Preview" className={`rounded shadow ${previewSize} object-cover`} />;
-    } 
+      return (
+        <img
+          src={`/uploads/${file.saved_name}`}
+          alt="Preview"
+          className={`rounded shadow ${previewSize} object-cover`}
+        />
+      );
+    }
     // Check if it's a PDF
     else if (fileExtension === "pdf") {
       return (
@@ -122,12 +136,18 @@ const MyFiles = () => {
           className={`border rounded shadow ${previewSize}`}
         ></iframe>
       );
-    } 
+    }
     // For other document types
     else {
       return (
-        <div className={`flex items-center justify-center ${previewSize} border-dashed border-gray-300 rounded shadow`}>
-          <FontAwesomeIcon icon={faFileAlt} className="text-gray-500" size="2x" />
+        <div
+          className={`flex items-center justify-center ${previewSize} border-dashed border-gray-300 rounded shadow`}
+        >
+          <FontAwesomeIcon
+            icon={faFileAlt}
+            className="text-gray-500"
+            size="2x"
+          />
           <p className="text-gray-500">Preview not available</p>
         </div>
       );
@@ -144,8 +164,13 @@ const MyFiles = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {files.map((file) => (
-            <div key={file.id} className="p-4 shadow rounded border-2 border-white border-opacity-50 text-black">
-              <p className="font-semibold mb-4 text-gray-200">{file.original_name}</p>
+            <div
+              key={file.id}
+              className="p-4 shadow rounded border-2 border-white border-opacity-50 text-black"
+            >
+              <p className="font-semibold mb-4 text-gray-200">
+                {file.original_name}
+              </p>
               {renderFilePreview(file)} {/* Render preview */}
               <div className="mt-4 flex items-center justify-center gap-4">
                 <a
@@ -172,9 +197,12 @@ const MyFiles = () => {
                   <FontAwesomeIcon icon={faCopy} className="text-gray-500" />
                 </button>
                 {/* For image files, allow crop/resize */}
-                {file.saved_name.endsWith(".jpg") || file.saved_name.endsWith(".png") ? (
+                {file.saved_name.endsWith(".jpg") ||
+                file.saved_name.endsWith(".png") ? (
                   <button
-                    onClick={() => setSelectedFile(`/uploads/${file.saved_name}`)}
+                    onClick={() =>
+                      setSelectedFile(`/uploads/${file.saved_name}`)
+                    }
                     className="py-1 px-2 rounded hover:bg-blue-100 transition"
                     title="Edit (Crop)"
                   >
