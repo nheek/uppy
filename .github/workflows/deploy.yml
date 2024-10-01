@@ -50,6 +50,7 @@ jobs:
             echo "POSTGRES_URL=${{ secrets.POSTGRES_URL }}" >> .env
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> .env
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+            echo "DOMAIN=${{ secrets.DOMAIN }}" >> .env
             curl -H "Authorization: token ${{ secrets.PERSONAL_ACCESS_TOKEN }}" -O -L https://raw.githubusercontent.com/nheek/uppy/main/Dockerfile
             curl -H "Authorization: token ${{ secrets.PERSONAL_ACCESS_TOKEN }}" -O -L https://raw.githubusercontent.com/nheek/uppy/main/docker-compose.yml
 

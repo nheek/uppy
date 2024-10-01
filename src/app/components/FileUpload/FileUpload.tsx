@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from "next/image";
 import Cookies from "js-cookie";
 
 const FileUpload = () => {
@@ -7,7 +8,7 @@ const FileUpload = () => {
   const [fullUrl, setFullUrl] = useState<string | null>(null); // Full URL for sharing
 
   // Check if user is logged in
-  const isLoggedIn = !!Cookies.get("token");
+  const isLoggedIn = Cookies.get("token");
 
   // Render a message if the user is not logged in
   if (!isLoggedIn) {
@@ -34,7 +35,7 @@ const FileUpload = () => {
     }
 
     // Validate file size (10 MB limit)
-    const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
+    const MAX_SIZE = 10 * 1024 * 1024;
     if (selectedFile.size > MAX_SIZE) {
       alert("File size exceeds the 10 MB limit.");
       return;
@@ -94,8 +95,8 @@ const FileUpload = () => {
 
       {/* Display the uploaded file URL and preview */}
       {fileUrl && (
-        <div className="mt-4 p-4 bg-white shadow rounded">
-          <h2 className="text-lg font-semibold text-black text-opacity-40">
+        <div className="mt-4 p-4 border-2 border-gray-300 border-opacity-50 rounded">
+          <h2 className="text-lg font-semibold text-white text-opacity-40">
             File uploaded!
           </h2>
           <a
@@ -114,13 +115,16 @@ const FileUpload = () => {
           </button>
           {/* Preview for image files */}
           {selectedFile?.type.startsWith("image/") && (
-            <div className="mt-2">
-              <img
+              <Image
                 src={fileUrl}
                 alt="Uploaded file"
-                className="w-64 h-auto border rounded shadow"
+                width={0} // Adjust the width as needed
+                height={0} // Adjust the height as needed
+                sizes="16rem"
+                className="mt-4"
+                style={{height: "100%", width:"100%"}}
+
               />
-            </div>
           )}
         </div>
       )}
