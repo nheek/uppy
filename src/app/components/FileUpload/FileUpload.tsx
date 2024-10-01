@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Image from "next/image";
 import Cookies from "js-cookie";
 
 const FileUpload = () => {
@@ -115,16 +114,13 @@ const FileUpload = () => {
           </button>
           {/* Preview for image files */}
           {selectedFile?.type.startsWith("image/") && (
-              <Image
-                src={fileUrl}
-                alt="Uploaded file"
-                width={0} // Adjust the width as needed
-                height={0} // Adjust the height as needed
-                sizes="16rem"
-                className="mt-4"
-                style={{height: "100%", width:"100%"}}
-
-              />
+              <div className="mt-2">
+                <img
+                  src={fileUrl}
+                  alt="Uploaded file"
+                  className="w-64 h-auto"
+                />
+              </div>
           )}
         </div>
       )}
