@@ -14,7 +14,7 @@ services:
       - PLACEHOLDER=YES
     image: "nheek/uppy:latest"
     volumes:
-      - ./uploads:/usr/src/app/public/uploads
+      - uploads:/usr/src/app/public/uploads
 
   postgres:
     image: postgres:latest
