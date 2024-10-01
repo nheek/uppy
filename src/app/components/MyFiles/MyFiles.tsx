@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
@@ -24,23 +24,8 @@ const MyFiles = () => {
   const [cropper, setCropper] = useState<Cropper | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
-  // Check if user is logged in
-  const isLoggedIn = !!Cookies.get("token");
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
-  // Render a message if the user is not logged in
-  if (!isLoggedIn) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-6">
-        <p className="text-xl mb-4 font-bold text-red-300">
-          You must be logged in to view your files.
-        </p>
-      </div>
-    );
-  }
-
-  useEffect(() => {
-    fetchFiles();
-  }, []);
 
   const fetchFiles = async () => {
     const token = Cookies.get("token");
@@ -57,6 +42,25 @@ const MyFiles = () => {
       alert("Failed to load files");
     }
   };
+  
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (token) {
+      setIsLoggedIn(true);
+      fetchFiles();
+    }
+  }, []);
+
+  // Render a message if the user is not logged in
+  if (!isLoggedIn) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-6">
+        <p className="text-xl mb-4 font-bold text-red-300">
+          You must be logged in to view your files.
+        </p>
+      </div>
+    );
+  }
 
   const deleteFile = async (fileId: number, savedName: string) => {
     const token = Cookies.get("token");
