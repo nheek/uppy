@@ -246,6 +246,16 @@ const MyFiles = () => {
                 Cancel
               </button>
             </div>
+            {cropData && (
+              <div className="mt-4">
+                <h3>Cropped Image Preview:</h3>
+                <img
+                  src={cropData}
+                  alt="Cropped Preview"
+                  className="rounded shadow"
+                />
+              </div>
+            )}
           </div>
         </div>
       )}
