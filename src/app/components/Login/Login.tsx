@@ -31,7 +31,7 @@ const Login = () => {
     <div className="flex items-center justify-center min-h-screen">
       <form
         onSubmit={handleLogin}
-        className="w-[400px] p-8 rounded-md shadow-md border-2 border-white border-opacity-50"
+        className="w-[350px]"
       >
         <h1 className="text-2xl mb-8">Login</h1>
         <div className="mb-8">
