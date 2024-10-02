@@ -24,7 +24,11 @@ const MyFiles = () => {
   const [modalMessage, setModalMessage] = useState("");
   const [isDeleteConfirmationVisible, setIsDeleteConfirmationVisible] = useState(false);
   const [fileToDelete, setFileToDelete] = useState<File | null>(null);
-  const websiteUrl = `${window.location.protocol}//${window.location.host}`;
+  const [websiteUrl, setWebsiteUrl] = useState<string>("");
+
+  useEffect(() => {
+    setWebsiteUrl(`${window.location.protocol}//${window.location.host}`);
+  }, []);
 
   const showModal = (title: string, message: string) => {
     setModalTitle(title);
