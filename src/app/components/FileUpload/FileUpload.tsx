@@ -6,13 +6,17 @@ const FileUpload = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileUrl, setFileUrl] = useState<string | null>(null); // Relative URL for the file
   const [fullUrl, setFullUrl] = useState<string | null>(null); // Full URL for sharing
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null); // For login check
-  const [loading, setLoading] = useState(true); // Loading state
-
-  // Modal state
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>("");
   const [modalMessage, setModalMessage] = useState<string>("");
+
+  const showModal = (title: string, message: string) => {
+    setModalTitle(title);
+    setModalMessage(message);
+    setIsModalVisible(true);
+  };
 
   // Check if user is logged in
   useEffect(() => {
@@ -50,18 +54,14 @@ const FileUpload = () => {
   const handleFileUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedFile) {
-      setModalTitle("Error");
-      setModalMessage("Please select a file.");
-      setIsModalVisible(true);
+      showModal("Error", "Please select a file.");
       return;
     }
 
     // Validate file size (10 MB limit)
     const MAX_SIZE = 10 * 1024 * 1024;
     if (selectedFile.size > MAX_SIZE) {
-      setModalTitle("Error");
-      setModalMessage("File size exceeds the 10 MB limit.");
-      setIsModalVisible(true);
+      showModal("Error", "File size exceeds the 10 MB limit.");
       return;
     }
 
@@ -82,37 +82,25 @@ const FileUpload = () => {
         const { fileUrl, fullUrl } = await response.json();
         setFileUrl(fileUrl); // Set the relative URL for the file preview
         setFullUrl(fullUrl); // Set the full URL for sharing
-        setModalTitle("Success");
-        setModalMessage("File uploaded successfully.");
-        setIsModalVisible(true);
+        showModal("Success", "File uploaded successfully.");
       } else {
         const errorMessage = await response.json();
-        setModalTitle("Error");
-        setModalMessage(`File upload failed: ${errorMessage.message}`);
-        setIsModalVisible(true);
+        showModal("Error", errorMessage);
       }
     } catch (error) {
-      setModalTitle("Error");
       if (error instanceof Error) {
-        setModalMessage(error.message);
+        showModal("Error", error.message);
       } else {
-        setModalMessage("An unknown error occurred.");
+        showModal("Error", "An unknown error occurred.");
       }
-      setIsModalVisible(true);
     }
   };
 
   const copyToClipboard = () => {
     if (fullUrl) {
       navigator.clipboard.writeText(fullUrl);
-      setModalTitle("Success");
-      setModalMessage("Link copied to clipboard!");
-      setIsModalVisible(true);
+      showModal("Success", "Link copied to clipboard!");
     }
-  };
-
-  const closeModal = () => {
-    setIsModalVisible(false);
   };
 
   return (
@@ -139,28 +127,30 @@ const FileUpload = () => {
 
       {/* Display the uploaded file URL and preview */}
       {fileUrl && (
-        <div className="mt-4 p-4 border-2 border-gray-300 border-opacity-50 rounded">
-          <h2 className="text-lg font-semibold text-white text-opacity-40">
-            File uploaded!
-          </h2>
-          <a
-            href={fileUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 underline"
-          >
-            Click here to download/view your file
-          </a>
-          <button
-            onClick={copyToClipboard}
-            className="block mt-2 bg-gray-200 text-black p-1 rounded shadow hover:bg-gray-300"
-          >
-            Copy Shareable Link
-          </button>
+        <div className="w-full mt-4 p-4 border-2 border-gray-300 border-opacity-50 rounded">
+          <div className="flex gap-2 justify-between">
+            <a
+              href={fileUrl}
+              target="_blank"
+              rel="noopener"
+            >
+              Download/View
+            </a>
+            <button
+              onClick={copyToClipboard}
+            >
+              Copy Link
+            </button>
+          </div>
+
           {/* Preview for image files */}
           {selectedFile?.type.startsWith("image/") && (
             <div className="mt-2">
-              <img src={fileUrl} alt="Uploaded file" className="w-64 h-auto" />
+              <img
+                src={fileUrl}
+                alt="Uploaded file"
+                className="w-full h-auto"
+              />
             </div>
           )}
         </div>
@@ -171,7 +161,7 @@ const FileUpload = () => {
         isVisible={isModalVisible}
         title={modalTitle}
         message={modalMessage}
-        onClose={closeModal}
+        onClose={() => setIsModalVisible(false)}
       />
     </div>
   );

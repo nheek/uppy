@@ -4,6 +4,7 @@ import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faCopy, faCrop, faEye, faFileAlt } from "@fortawesome/free-solid-svg-icons";
+import Modal from "@/app/components/Modal/Modal";
 
 interface File {
   id: number;
@@ -16,9 +17,19 @@ const MyFiles = () => {
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const [cropData, setCropData] = useState<string | null>(null);
   const [cropper, setCropper] = useState<Cropper | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true); // Add a loading state
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalMessage, setModalMessage] = useState("");
+  const [isDeleteConfirmationVisible, setIsDeleteConfirmationVisible] = useState(false);
+  const [fileToDelete, setFileToDelete] = useState<File | null>(null);
+
+  const showModal = (title: string, message: string) => {
+    setModalTitle(title);
+    setModalMessage(message);
+    setIsModalVisible(true);
+  };
 
   const fetchFiles = async () => {
     const token = Cookies.get("token");
@@ -32,7 +43,7 @@ const MyFiles = () => {
       const data = await response.json();
       setFiles(data);
     } else {
-      alert("Failed to load files");
+      showModal("Error", "Failed to fetch files.");
     }
   };
 
@@ -73,16 +84,29 @@ const MyFiles = () => {
     });
 
     if (response.ok) {
-      alert("File deleted successfully");
+      showModal("Success", "File deleted successfully!");
       fetchFiles(); // Refresh file list
     } else {
-      alert("Failed to delete file");
+      showModal("Error", "Failed to delete file.");
     }
+  };
+
+  const confirmDelete = (file: File) => {
+    setFileToDelete(file);
+    setIsDeleteConfirmationVisible(true);
+  };
+
+  const handleDeleteConfirmation = () => {
+    if (fileToDelete) {
+      deleteFile(fileToDelete.id, fileToDelete.saved_name);
+    }
+    setIsDeleteConfirmationVisible(false);
+    setFileToDelete(null);
   };
 
   const copyToClipboard = (url: string) => {
     navigator.clipboard.writeText(url);
-    alert("Link copied to clipboard!");
+    showModal("Success", "Link copied to clipboard!");
   };
 
   const uploadCroppedImage = async (base64Image: string, savedName: string) => {
@@ -97,10 +121,10 @@ const MyFiles = () => {
     });
 
     if (response.ok) {
-      setMessage("Cropped image saved successfully!");
+      showModal("Success", "Cropped image saved successfully!");
       fetchFiles(); // Refresh file list
     } else {
-      setMessage("Failed to save cropped image.");
+      showModal("Error", "Failed to save cropped image.");
     }
   };
 
@@ -160,7 +184,6 @@ const MyFiles = () => {
   return (
     <div className="flex flex-col min-h-screen p-6">
       <h1 className="text-4xl mb-4 font-bold text-blue-600">My Files</h1>
-      {message && <p className="text-green-600">{message}</p>}
 
       {files.length === 0 ? (
         <p className="text-gray-600">No files uploaded yet.</p>
@@ -186,7 +209,7 @@ const MyFiles = () => {
                   <FontAwesomeIcon icon={faEye} className="text-blue-600" />
                 </a>
                 <button
-                  onClick={() => deleteFile(file.id, file.saved_name)}
+                  onClick={() => confirmDelete(file)}
                   className="py-1 px-2 rounded hover:bg-red-100 transition"
                   title="Delete"
                 >
@@ -221,44 +244,64 @@ const MyFiles = () => {
       {/* Image Cropper Modal */}
       {selectedFile && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-lg font-semibold">Crop Image</h2>
+          <div className="bg-white p-6 rounded-lg">
             <Cropper
               src={selectedFile}
               style={{ height: 400, width: "100%" }}
               initialAspectRatio={1}
-              guides
-              cropBoxResizable={false}
-              crop={getCropData}
-              onInitialized={(instance) => setCropper(instance)}
+              aspectRatio={1}
+              guides={false}
+              onInitialized={(instance) => {
+                setCropper(instance);
+              }}
             />
-            <div className="mt-4">
-              <button
-                onClick={getCropData}
-                className="bg-blue-500 text-white p-2 rounded shadow hover:bg-blue-600 transition"
-              >
-                Crop Image
-              </button>
-              <button
-                onClick={() => setSelectedFile(null)}
-                className="bg-gray-500 text-white p-2 rounded shadow hover:bg-gray-600 transition ml-2"
-              >
-                Cancel
-              </button>
-            </div>
-            {cropData && (
-              <div className="mt-4">
-                <h3>Cropped Image Preview:</h3>
-                <img
-                  src={cropData}
-                  alt="Cropped Preview"
-                  className="rounded shadow"
-                />
-              </div>
-            )}
+            <button
+              onClick={getCropData}
+              className="mt-4 bg-blue-600 text-white py-2 px-4 rounded"
+            >
+              Crop
+            </button>
+            <button
+              onClick={() => setSelectedFile(null)}
+              className="mt-4 bg-red-600 text-white py-2 px-4 rounded"
+            >
+              Cancel
+            </button>
           </div>
         </div>
       )}
+
+      {/* Confirmation Modal for Deletion */}
+      <Modal
+        isVisible={isDeleteConfirmationVisible}
+        title="Confirm Deletion"
+        message={`Are you sure you want to delete the file '${fileToDelete?.original_name}'?`}
+        onClose={() => setIsDeleteConfirmationVisible(false)}
+        closeBtn={false}
+      >
+        <div className="flex justify-between">
+          <button
+            onClick={handleDeleteConfirmation}
+            className="bg-red-400 text-white py-2 px-4 rounded"
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => setIsDeleteConfirmationVisible(false)}
+            className="bg-gray-300 text-black py-2 px-4 rounded"
+          >
+            Cancel
+          </button>
+        </div>
+      </Modal>
+
+      {/* Main Modal for Other Messages */}
+      <Modal
+        isVisible={isModalVisible}
+        title={modalTitle}
+        message={modalMessage}
+        onClose={() => setIsModalVisible(false)}
+      />
     </div>
   );
 };
