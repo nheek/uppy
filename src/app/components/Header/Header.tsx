@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import React from "react";
+import Link from "next/link";
 
 const Header = () => {
   const router = useRouter();
@@ -24,26 +25,26 @@ const Header = () => {
         <nav>
           <ul className="flex space-x-4">
             <li>
-              <a href="/file-upload" className="hover:underline">
+              <Link href="/file-upload" className="hover:underline">
                 Upload File
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/my-files" className="hover:underline">
+              <Link href="/my-files" className="hover:underline">
                 My Files
-              </a>
+              </Link>
             </li>
             {!isLoggedIn ? (
               <>
                 <li>
-                  <a href="/register" className="hover:underline">
+                  <Link href="/register" className="hover:underline">
                     Register
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="/login" className="hover:underline">
+                  <Link href="/login" className="hover:underline">
                     Login
-                  </a>
+                  </Link>
                 </li>
               </>
             ) : (
