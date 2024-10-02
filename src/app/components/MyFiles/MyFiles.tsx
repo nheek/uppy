@@ -140,7 +140,7 @@ const MyFiles = () => {
     const fileExtension = file.saved_name.split(".").pop()?.toLowerCase();
 
     // Define a fixed size for the previews
-    const previewSize = "w-full h-40";
+    const previewSize = "w-full h-52";
     const allowedImages = ["jpg", "png", "jpeg"];
     const allowedDocuments = ["pdf"];
 
@@ -150,7 +150,7 @@ const MyFiles = () => {
         <img
           src={`/uploads/${file.saved_name}`}
           alt="Preview"
-          className={`rounded shadow object-cover ${previewSize}`}
+          className={`object-cover ${previewSize}`}
         />
       );
     }
@@ -160,7 +160,7 @@ const MyFiles = () => {
         <iframe
           src={`/uploads/${file.saved_name}#toolbar=0`}
           title={file.original_name}
-          className={`border rounded shadow ${previewSize}`}
+          className={`${previewSize}`}
         ></iframe>
       );
     }
@@ -182,19 +182,19 @@ const MyFiles = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen p-6">
-      <h1 className="text-4xl mb-4 font-bold text-blue-600">My Files</h1>
+    <div className="flex flex-col min-h-screen py-6">
+      <h1 className="text-4xl mb-4 pl-4 font-bold text-blue-600">My Files</h1>
 
       {files.length === 0 ? (
-        <p className="text-gray-600">No files uploaded yet.</p>
+        <p className="text-gray-600 pl-4">No files uploaded yet.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-0">
           {files.map((file) => (
             <div
               key={file.id}
-              className="p-4 shadow rounded border-2 border-white border-opacity-50 text-black"
+              className="py-2 border-t-2 md:border-2 border-gray-800 border-opacity-50"
             >
-              <p className="font-semibold mb-4 text-gray-200">
+              <p className="font-semibold mt-4 mb-2 pl-4 text-gray-200">
                 {file.original_name}
               </p>
               {renderFilePreview(file)} {/* Render preview */}

@@ -127,7 +127,7 @@ const FileUpload = () => {
 
       {/* Display the uploaded file URL and preview */}
       {fileUrl && (
-        <div className="w-full mt-4 p-4 border-2 border-gray-300 border-opacity-50 rounded">
+        <div className="w-full md:w-max mt-4">
           <div className="flex gap-2 justify-between">
             <a
               href={fileUrl}
@@ -149,7 +149,7 @@ const FileUpload = () => {
               <img
                 src={fileUrl}
                 alt="Uploaded file"
-                className="w-full h-auto"
+                className="w-full md:w-max h-auto md:mx-auto"
               />
             </div>
           )}
