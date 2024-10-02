@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
+import Modal from "@/app/components/Modal/Modal";
 
 const FileUpload = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -7,6 +8,11 @@ const FileUpload = () => {
   const [fullUrl, setFullUrl] = useState<string | null>(null); // Full URL for sharing
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null); // For login check
   const [loading, setLoading] = useState(true); // Loading state
+
+  // Modal state
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [modalTitle, setModalTitle] = useState<string>("");
+  const [modalMessage, setModalMessage] = useState<string>("");
 
   // Check if user is logged in
   useEffect(() => {
@@ -44,14 +50,18 @@ const FileUpload = () => {
   const handleFileUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedFile) {
-      alert("Please select a file.");
+      setModalTitle("Error");
+      setModalMessage("Please select a file.");
+      setIsModalVisible(true);
       return;
     }
 
     // Validate file size (10 MB limit)
     const MAX_SIZE = 10 * 1024 * 1024;
     if (selectedFile.size > MAX_SIZE) {
-      alert("File size exceeds the 10 MB limit.");
+      setModalTitle("Error");
+      setModalMessage("File size exceeds the 10 MB limit.");
+      setIsModalVisible(true);
       return;
     }
 
@@ -59,30 +69,50 @@ const FileUpload = () => {
     formData.append("file", selectedFile);
 
     const token = Cookies.get("token");
-    const response = await fetch("/api/upload", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    });
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
 
-    if (response.ok) {
-      const { fileUrl, fullUrl } = await response.json();
-      setFileUrl(fileUrl); // Set the relative URL for the file preview
-      setFullUrl(fullUrl); // Set the full URL for sharing
-      alert("File uploaded successfully");
-    } else {
-      const errorMessage = await response.json();
-      alert(`File upload failed: ${errorMessage.message}`);
+      if (response.ok) {
+        const { fileUrl, fullUrl } = await response.json();
+        setFileUrl(fileUrl); // Set the relative URL for the file preview
+        setFullUrl(fullUrl); // Set the full URL for sharing
+        setModalTitle("Success");
+        setModalMessage("File uploaded successfully.");
+        setIsModalVisible(true);
+      } else {
+        const errorMessage = await response.json();
+        setModalTitle("Error");
+        setModalMessage(`File upload failed: ${errorMessage.message}`);
+        setIsModalVisible(true);
+      }
+    } catch (error) {
+      setModalTitle("Error");
+      if (error instanceof Error) {
+        setModalMessage(error.message);
+      } else {
+        setModalMessage("An unknown error occurred.");
+      }
+      setIsModalVisible(true);
     }
   };
 
   const copyToClipboard = () => {
     if (fullUrl) {
       navigator.clipboard.writeText(fullUrl);
-      alert("Link copied to clipboard!");
+      setModalTitle("Success");
+      setModalMessage("Link copied to clipboard!");
+      setIsModalVisible(true);
     }
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
   };
 
   return (
@@ -101,7 +131,7 @@ const FileUpload = () => {
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white p-2 rounded shadow hover:bg-blue-600 transition"
+          className="w-full h-14 bg-blue-500 text-white p-2 rounded shadow hover:bg-blue-600 transition"
         >
           Upload File
         </button>
@@ -135,6 +165,14 @@ const FileUpload = () => {
           )}
         </div>
       )}
+
+      {/* Custom Modal */}
+      <Modal
+        isVisible={isModalVisible}
+        title={modalTitle}
+        message={modalMessage}
+        onClose={closeModal}
+      />
     </div>
   );
 };

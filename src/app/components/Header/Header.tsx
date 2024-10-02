@@ -24,11 +24,6 @@ const Header = () => {
         <nav>
           <ul className="flex space-x-4">
             <li>
-              <a href="/" className="hover:underline">
-                Home
-              </a>
-            </li>
-            <li>
               <a href="/file-upload" className="hover:underline">
                 Upload File
               </a>
