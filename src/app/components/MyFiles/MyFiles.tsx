@@ -3,13 +3,7 @@ import Cookies from "js-cookie";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTrash,
-  faCopy,
-  faCrop,
-  faEye,
-  faFileAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faCopy, faCrop, faEye, faFileAlt } from "@fortawesome/free-solid-svg-icons";
 
 interface File {
   id: number;
@@ -23,9 +17,8 @@ const MyFiles = () => {
   const [cropData, setCropData] = useState<string | null>(null);
   const [cropper, setCropper] = useState<Cropper | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-
+  const [loading, setLoading] = useState<boolean>(true); // Add a loading state
 
   const fetchFiles = async () => {
     const token = Cookies.get("token");
@@ -42,14 +35,20 @@ const MyFiles = () => {
       alert("Failed to load files");
     }
   };
-  
+
   useEffect(() => {
     const token = Cookies.get("token");
     if (token) {
       setIsLoggedIn(true);
       fetchFiles();
     }
+    setLoading(false); // Once token check is done, stop loading
   }, []);
+
+  // Render a loading spinner or nothing while checking login status
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-screen text-xl font-bold text-blue-600">Loading...</div>;
+  }
 
   // Render a message if the user is not logged in
   if (!isLoggedIn) {
@@ -118,19 +117,21 @@ const MyFiles = () => {
 
     // Define a fixed size for the previews
     const previewSize = "w-full h-40";
+    const allowedImages = ["jpg", "png", "jpeg"];
+    const allowedDocuments = ["pdf"];
 
     // Check if it's an image
-    if (fileExtension === "jpg" || fileExtension === "png") {
+    if (allowedImages.includes(fileExtension!)) {
       return (
         <img
           src={`/uploads/${file.saved_name}`}
           alt="Preview"
-          className={`rounded shadow ${previewSize} object-cover`}
+          className={`rounded shadow object-cover ${previewSize}`}
         />
       );
     }
     // Check if it's a PDF
-    else if (fileExtension === "pdf") {
+    else if (allowedDocuments.includes(fileExtension!)) {
       return (
         <iframe
           src={`/uploads/${file.saved_name}#toolbar=0`}
@@ -150,7 +151,7 @@ const MyFiles = () => {
             className="text-gray-500"
             size="2x"
           />
-          <p className="text-gray-500">Preview not available</p>
+          <p className="text-gray-500 ml-2">Preview not available</p>
         </div>
       );
     }
@@ -226,7 +227,7 @@ const MyFiles = () => {
               src={selectedFile}
               style={{ height: 400, width: "100%" }}
               initialAspectRatio={1}
-              guides={false}
+              guides
               cropBoxResizable={false}
               crop={getCropData}
               onInitialized={(instance) => setCropper(instance)}
@@ -240,20 +241,12 @@ const MyFiles = () => {
               </button>
               <button
                 onClick={() => setSelectedFile(null)}
-                className="ml-2 bg-gray-500 text-white p-2 rounded shadow hover:bg-gray-600 transition"
+                className="bg-gray-500 text-white p-2 rounded shadow hover:bg-gray-600 transition ml-2"
               >
-                Close
+                Cancel
               </button>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Show cropped image */}
-      {cropData && (
-        <div className="mt-4">
-          <h2 className="text-lg font-semibold">Cropped Image</h2>
-          <img src={cropData} alt="Cropped" className="border rounded shadow" />
         </div>
       )}
     </div>

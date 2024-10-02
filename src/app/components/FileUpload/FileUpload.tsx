@@ -1,13 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 
 const FileUpload = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileUrl, setFileUrl] = useState<string | null>(null); // Relative URL for the file
   const [fullUrl, setFullUrl] = useState<string | null>(null); // Full URL for sharing
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null); // For login check
+  const [loading, setLoading] = useState(true); // Loading state
 
   // Check if user is logged in
-  const isLoggedIn = Cookies.get("token");
+  useEffect(() => {
+    const token = Cookies.get("token");
+    setIsLoggedIn(!!token);
+    setLoading(false);
+  }, []);
+
+  // Render a loading spinner while checking login status
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-6">
+        <p className="text-xl mb-4 font-bold text-blue-600">Loading...</p>
+      </div>
+    );
+  }
 
   // Render a message if the user is not logged in
   if (!isLoggedIn) {
@@ -114,13 +129,9 @@ const FileUpload = () => {
           </button>
           {/* Preview for image files */}
           {selectedFile?.type.startsWith("image/") && (
-              <div className="mt-2">
-                <img
-                  src={fileUrl}
-                  alt="Uploaded file"
-                  className="w-64 h-auto"
-                />
-              </div>
+            <div className="mt-2">
+              <img src={fileUrl} alt="Uploaded file" className="w-64 h-auto" />
+            </div>
           )}
         </div>
       )}

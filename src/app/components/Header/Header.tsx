@@ -2,16 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import React from "react";
 
 const Header = () => {
   const router = useRouter();
-
-  // Check if the user is logged in by checking for the presence of a token
-  const isLoggedIn = !!Cookies.get("token");
-
+  const isLoggedIn = Cookies.get("token");
   const handleLogout = () => {
-    Cookies.remove("token"); // Remove token from cookies
-    router.push("/login"); // Redirect to login page
+    Cookies.remove("token");
+    router.push("/login");
   };
 
   return (
