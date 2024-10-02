@@ -127,17 +127,19 @@ const FileUpload = () => {
 
       {/* Display the uploaded file URL and preview */}
       {fileUrl && (
-        <div className="w-full md:w-max mt-4">
-          <div className="flex gap-2 justify-between">
+        <div className="w-full md:min-w-max md:w-full mt-4">
+          <div className="flex gap-2 md:gap-0 justify-between md:w-1/4 md:justify-center md:mx-auto">
             <a
               href={fileUrl}
               target="_blank"
               rel="noopener"
+              className="md:w-1/2"
             >
               Download/View
             </a>
             <button
               onClick={copyToClipboard}
+              className="md:w-1/2 md:text-right"
             >
               Copy Link
             </button>
@@ -149,8 +151,19 @@ const FileUpload = () => {
               <img
                 src={fileUrl}
                 alt="Uploaded file"
-                className="w-full md:w-max h-auto md:mx-auto"
+                className="w-max h-auto mx-auto"
               />
+            </div>
+          )}
+
+          {/* Preview for PDF files */}
+          {selectedFile?.type === "application/pdf" && (
+            <div className="mt-2 w-full">
+              <iframe
+                src={fileUrl}
+                className="w-full h-screen border"
+                title="PDF Preview"
+              ></iframe>
             </div>
           )}
         </div>
