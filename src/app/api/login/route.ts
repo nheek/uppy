@@ -1,5 +1,3 @@
-// src/app/api/login/route.ts
-
 import { pool } from "@/app/api/config";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
@@ -7,9 +5,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// POST method handler
 export async function POST(req: NextRequest) {
-  const { username, password } = await req.json(); // Use .json() to parse the request body
+  const { username, password } = await req.json();
 
   if (!username || !password) {
     return NextResponse.json(
@@ -34,7 +31,6 @@ export async function POST(req: NextRequest) {
 
     const user = rows[0];
 
-    // Compare the password with the hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return NextResponse.json(
@@ -43,8 +39,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Create JWT token
-    const token = jwt.sign({ id: user.id }, JWT_SECRET!, { expiresIn: "1h" });
+    const token = jwt.sign({ id: user.id }, JWT_SECRET!, { expiresIn: "30d" });
 
     return NextResponse.json({ token }, { status: 200 });
   } catch (error) {
@@ -56,7 +51,6 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// Optionally, you can export other methods if needed
 export async function GET() {
   return NextResponse.json(
     { message: "GET method not supported" },

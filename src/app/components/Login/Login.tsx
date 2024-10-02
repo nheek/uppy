@@ -20,7 +20,7 @@ const Login = () => {
 
     if (response.ok) {
       const { token } = await response.json();
-      Cookies.set("token", token, { expires: 15 });
+      Cookies.set("token", token, { expires: 30 });
       router.push("/");
     } else {
       alert("Login failed. Please check your credentials.");
