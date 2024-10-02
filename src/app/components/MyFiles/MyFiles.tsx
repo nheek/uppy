@@ -24,6 +24,7 @@ const MyFiles = () => {
   const [modalMessage, setModalMessage] = useState("");
   const [isDeleteConfirmationVisible, setIsDeleteConfirmationVisible] = useState(false);
   const [fileToDelete, setFileToDelete] = useState<File | null>(null);
+  const websiteUrl = process.env.DOMAIN;
 
   const showModal = (title: string, message: string) => {
     setModalTitle(title);
@@ -216,7 +217,7 @@ const MyFiles = () => {
                   <FontAwesomeIcon icon={faTrash} className="text-red-500" />
                 </button>
                 <button
-                  onClick={() => copyToClipboard(`/uploads/${file.saved_name}`)}
+                  onClick={() => copyToClipboard(`${websiteUrl}/uploads/${file.saved_name}`)}
                   className="py-1 px-2 rounded hover:bg-gray-200 transition"
                   title="Copy Shareable Link"
                 >
