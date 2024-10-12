@@ -33,8 +33,5 @@ RUN apk --no-cache add bash \
 # Copy built assets from the build stage
 COPY --from=build /usr/src/app .
 
-# Create uploads directory if it doesn't exist and set permissions
-RUN mkdir -p /usr/src/app/public/uploads && chown -R www-data:www-data /usr/src/app/public/uploads
-
 # Start PostgreSQL client and wait for it to be ready, then run the app
 CMD ["sh", "-c", "pg_isready -h postgres && npm run start"]
