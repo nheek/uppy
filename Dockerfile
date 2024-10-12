@@ -30,13 +30,10 @@ RUN apk --no-cache add bash \
     && wget -O /usr/local/bin/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh \
     && chmod +x /usr/local/bin/wait-for-it.sh
 
-# Add a non-root user (www-data)
-RUN addgroup -g 33 www-data && adduser -D -u 33 -G www-data www-data
-
 # Copy built assets from the build stage
 COPY --from=build /usr/src/app .
 
-# Set permissions for the uploads directory
+# Create uploads directory if it doesn't exist and set permissions
 RUN mkdir -p /usr/src/app/public/uploads && chown -R www-data:www-data /usr/src/app/public/uploads
 
 # Start PostgreSQL client and wait for it to be ready, then run the app
