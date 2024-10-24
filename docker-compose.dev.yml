@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   node-app:
     build:
@@ -19,10 +17,8 @@ services:
     command: npm run dev
 
   postgres:
-    image: postgres:latest
+    image: postgres:16
     restart: unless-stopped
-    ports:
-      - 4034:3306
     env_file:
       - .env
     environment:
