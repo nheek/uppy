@@ -6,7 +6,6 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 export async function GET(request: Request) {
   try {
-    // Verify the JWT token
     const authHeader = request.headers.get("authorization");
     const token = authHeader?.split(" ")[1];
 

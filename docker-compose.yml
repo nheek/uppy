@@ -8,8 +8,6 @@ services:
       - postgres
     env_file:
       - .env
-    environment:
-      - PLACEHOLDER=YES
     image: "nheek/uppy:latest"
     volumes:
       - uploads:/usr/src/app/public/uploads
@@ -19,8 +17,6 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    environment:
-      PLACEHOLDER: "YES"
     volumes:
       - postgres_db_data:/var/lib/postgresql/data
       - .sql_data:/docker-entrypoint-initdb.d/

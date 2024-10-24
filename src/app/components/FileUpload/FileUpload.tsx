@@ -18,14 +18,12 @@ const FileUpload = () => {
     setIsModalVisible(true);
   };
 
-  // Check if user is logged in
   useEffect(() => {
     const token = Cookies.get("token");
     setIsLoggedIn(!!token);
     setLoading(false);
   }, []);
 
-  // Render a loading spinner while checking login status
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-6">

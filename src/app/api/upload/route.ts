@@ -9,7 +9,6 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 export async function POST(request: Request) {
   try {
-    // Verify the JWT token
     const authHeader = request.headers.get("authorization");
     const token = authHeader?.split(" ")[1];
 
@@ -28,8 +27,6 @@ export async function POST(request: Request) {
     }
 
     const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
-
-    // Parse formData from the request
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
 
@@ -57,7 +54,7 @@ export async function POST(request: Request) {
     }
 
     // Validate file size (10 MB limit)
-    const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
+    const MAX_SIZE = 10 * 1024 * 1024;
     if (file.size > MAX_SIZE) {
       return NextResponse.json(
         { message: "File size exceeds the 10 MB limit" },

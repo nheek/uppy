@@ -58,15 +58,13 @@ const MyFiles = () => {
       setIsLoggedIn(true);
       fetchFiles();
     }
-    setLoading(false); // Once token check is done, stop loading
+    setLoading(false);
   }, []);
 
-  // Render a loading spinner or nothing while checking login status
   if (loading) {
     return <div className="flex items-center justify-center min-h-screen text-xl font-bold text-blue-600">Loading...</div>;
   }
 
-  // Render a message if the user is not logged in
   if (!isLoggedIn) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-6">

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); // New state for confirm password
+  const [confirmPassword, setConfirmPassword] = useState("");
   const router = useRouter();
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -21,7 +21,7 @@ const Register = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password, confirmPassword }), // Include confirmPassword in the request
+      body: JSON.stringify({ username, password, confirmPassword }),
     });
 
     if (response.ok) {

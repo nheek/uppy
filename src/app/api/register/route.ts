@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 const saltRounds = 10;
 
-// POST method handler
 export async function POST(req: NextRequest) {
   const { username, password, confirmPassword } = await req.json(); // Use .json() to parse the request body
 

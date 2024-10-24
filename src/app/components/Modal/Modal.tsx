@@ -5,8 +5,8 @@ interface ModalProps {
   title: string;
   message: string;
   onClose: () => void;
-  children?: ReactNode; // Optional children prop
-  closeBtn?: boolean; // Optional closeBtn prop
+  children?: ReactNode;
+  closeBtn?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({

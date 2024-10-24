@@ -1,9 +1,9 @@
-"use client"; // Ensure this is included
+"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation"; // Use next/navigation for client components
+import { useRouter } from "next/navigation";
 
 const Index = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -17,7 +17,7 @@ const Index = () => {
   const handleLogout = () => {
     Cookies.remove("token");
     setIsAuthenticated(false);
-    router.push("/"); // Redirect to homepage
+    router.push("/");
   };
 
   return (

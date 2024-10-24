@@ -5,13 +5,9 @@ import path from "path";
 export const POST = async (request: Request) => {
   try {
     const data = await request.json();
-    const { croppedImage, savedName } = data; // assuming these are sent from the frontend
-
-    // Decode the base64 image string
+    const { croppedImage, savedName } = data;
     const base64Data = croppedImage.replace(/^data:image\/\w+;base64,/, "");
     const buffer = Buffer.from(base64Data, "base64");
-
-    // Define the upload directory
     const uploadDir = path.join(process.cwd(), "public/uploads");
     const filePath = path.join(uploadDir, savedName);
 
