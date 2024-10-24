@@ -58,7 +58,5 @@ jobs:
             cd .sql_data
             curl -H "Authorization: token ${{ secrets.PERSONAL_ACCESS_TOKEN }}" -O -L https://raw.githubusercontent.com/nheek/uppy/main/.sql_data/create_database.sql
 
-            mkdir uploads
-            
-            docker pull nheek/uppy:latest
-            docker compose up -d
+            docker compose pull
+            docker compose up -d && curl -d ""uppy deployed succesfully 🚀" https://ntfy.nheek.com/${{ secrets.NTFY_TOPIC }}
