@@ -15,7 +15,7 @@ services:
       - uploads:/usr/src/app/public/uploads
 
   postgres:
-    image: postgres:16
+    image: postgres:17
     restart: unless-stopped
     env_file:
       - .env
