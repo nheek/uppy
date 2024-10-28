@@ -9,7 +9,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #DBDDDA    ;
     --foreground: #ededed;
   }
 }
@@ -24,4 +24,11 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.neu {
+  border-radius: 50px;
+  background: #e0e0e0;
+  box-shadow:  20px 20px 60px #bebebe,
+             -20px -20px 60px #ffffff;
 }

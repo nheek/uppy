@@ -103,7 +103,7 @@ const FileUpload = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6">
-      <h1 className="text-4xl mb-4 font-bold text-blue-600">
+      <h1 className="text-4xl mb-4 font-bold text-blue-950">
         Upload your files
       </h1>
       <form
@@ -113,13 +113,14 @@ const FileUpload = () => {
         <input
           type="file"
           onChange={handleFileChange}
-          className="mb-4 border border-blue-500 rounded p-2 text-white"
+          className="neu bg-blue-950 mb-4 rounded-3xl px-6 py-4 text-blue-950"
         />
         <button
           type="submit"
-          className="w-full h-14 bg-blue-500 text-white p-2 rounded shadow hover:bg-blue-600 transition"
+          className="neu w-full h-14 bg-blue-500 flex items-center justify-center gap-4 text-blue-950 mt-6 p-2 rounded-3xl"
         >
-          Upload File
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#172554" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 8l-5-5-5 5M12 4.2v10.3"/></svg>
+          <span className="text-lg">Upload File</span>
         </button>
       </form>
 
