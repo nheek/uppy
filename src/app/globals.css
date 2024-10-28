@@ -9,7 +9,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #DBDDDA    ;
+    --background: #dbddda;
     --foreground: #ededed;
   }
 }
@@ -29,12 +29,14 @@ body {
 .neu {
   border-radius: 50px;
   background: #e0e0e0;
-  box-shadow:  20px 20px 60px #bebebe,
-             -20px -20px 60px #ffffff;
+  box-shadow:
+    20px 20px 60px #bebebe,
+    -20px -20px 60px #ffffff;
 }
 .neu-modal {
   border-radius: 50px;
   background: #e0e0e0;
-  box-shadow:  5px 5px 12px #bebebe,
-             -5px -5px 12px #ffffff;
+  box-shadow:
+    5px 5px 12px #bebebe,
+    -5px -5px 12px #ffffff;
 }

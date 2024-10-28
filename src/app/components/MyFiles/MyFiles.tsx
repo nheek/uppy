@@ -3,7 +3,13 @@ import Cookies from "js-cookie";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faCopy, faCrop, faEye, faFileAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faCopy,
+  faCrop,
+  faEye,
+  faFileAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import Modal from "@/app/components/Modal/Modal";
 
 interface File {
@@ -22,7 +28,8 @@ const MyFiles = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [modalMessage, setModalMessage] = useState("");
-  const [isDeleteConfirmationVisible, setIsDeleteConfirmationVisible] = useState(false);
+  const [isDeleteConfirmationVisible, setIsDeleteConfirmationVisible] =
+    useState(false);
   const [fileToDelete, setFileToDelete] = useState<File | null>(null);
   const [websiteUrl, setWebsiteUrl] = useState<string>("");
 
@@ -62,7 +69,11 @@ const MyFiles = () => {
   }, []);
 
   if (loading) {
-    return <div className="flex items-center justify-center min-h-screen text-xl font-bold text-blue-600">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen text-xl font-bold text-blue-600">
+        Loading...
+      </div>
+    );
   }
 
   if (!isLoggedIn) {
@@ -186,17 +197,16 @@ const MyFiles = () => {
 
   return (
     <div className="flex flex-col min-h-screen py-6">
-      <h1 className="text-4xl mt-[20%] md:mt-[5%] mb-4 pl-4 font-bold text-blue-950">My Files</h1>
+      <h1 className="text-4xl mt-[20%] md:mt-[5%] mb-4 pl-4 font-bold text-blue-950">
+        My Files
+      </h1>
 
       {files.length === 0 ? (
         <p className="text-gray-600 pl-4">No files uploaded yet.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-2 px-4">
           {files.map((file) => (
-            <div
-              key={file.id}
-              className="py-2 neu"
-            >
+            <div key={file.id} className="py-2 neu">
               <p className="font-semibold mt-4 mb-2 pl-4 text-blue-950">
                 {file.original_name}
               </p>
@@ -219,7 +229,9 @@ const MyFiles = () => {
                   <FontAwesomeIcon icon={faTrash} className="text-red-500" />
                 </button>
                 <button
-                  onClick={() => copyToClipboard(`${websiteUrl}/uploads/${file.saved_name}`)}
+                  onClick={() =>
+                    copyToClipboard(`${websiteUrl}/uploads/${file.saved_name}`)
+                  }
                   className="py-1 px-2 rounded hover:bg-gray-200 transition"
                   title="Copy Shareable Link"
                 >

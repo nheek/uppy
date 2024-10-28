@@ -24,16 +24,16 @@ const Modal: React.FC<ModalProps> = ({
       <div className="neu-modal bg-gray-500 text-blue-950 rounded-lg shadow-lg w-11/12 max-w-md p-6">
         <h2 className="text-xl font-semibold mb-4">{title}</h2>
         <p className="mb-6">{message}</p>
-        {children && <div className="mb-4">{children}</div>} {/* Render children if provided */}
-        {
-          closeBtn &&
-            <button
-              onClick={onClose}
-              className="block bg-blue-950 text-white mt-2 px-6 py-2 rounded-3xl mr-0 ml-auto"
-            >
-              Close
-            </button>
-        }
+        {children && <div className="mb-4">{children}</div>}{" "}
+        {/* Render children if provided */}
+        {closeBtn && (
+          <button
+            onClick={onClose}
+            className="block bg-blue-950 text-white mt-2 px-6 py-2 rounded-3xl mr-0 ml-auto"
+          >
+            Close
+          </button>
+        )}
       </div>
     </div>
   );
