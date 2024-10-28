@@ -127,18 +127,18 @@ const FileUpload = () => {
       {/* Display the uploaded file URL and preview */}
       {fileUrl && (
         <div className="w-full md:min-w-max md:w-full mt-4">
-          <div className="flex gap-2 md:gap-0 justify-between md:w-1/4 md:justify-center md:mx-auto">
+          <div className="flex gap-2 md:gap-0 justify-between md:w-1/4 md:mx-auto mb-4">
             <a
               href={fileUrl}
               target="_blank"
               rel="noopener"
-              className="md:w-1/2"
+              className="block bg-blue-950 px-2 py-1 rounded-3xl"
             >
               Download/View
             </a>
             <button
               onClick={copyToClipboard}
-              className="md:w-1/2 md:text-right"
+              className="block md:text-right bg-blue-950 px-2 py-1 rounded-3xl"
             >
               Copy Link
             </button>

@@ -14,7 +14,7 @@ const Header = () => {
   };
 
   return (
-    <header className="neu fixed left-1/2 transform -translate-x-1/2 top-4 w-2/3 text-blue-950 px-4 py-4 rounded-3xl">
+    <header className="neu w-[90%] md:w-2/3 fixed left-1/2 transform -translate-x-1/2 top-4 text-blue-950 px-4 py-4 rounded-3xl">
       <div className="flex justify-between items-center container mx-auto">
         <h1
           className="text-3xl font-bold cursor-pointer"

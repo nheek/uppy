@@ -186,18 +186,18 @@ const MyFiles = () => {
 
   return (
     <div className="flex flex-col min-h-screen py-6">
-      <h1 className="text-4xl mb-4 pl-4 font-bold text-blue-600">My Files</h1>
+      <h1 className="text-4xl mt-[20%] md:mt-[5%] mb-4 pl-4 font-bold text-blue-950">My Files</h1>
 
       {files.length === 0 ? (
         <p className="text-gray-600 pl-4">No files uploaded yet.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-2 px-4">
           {files.map((file) => (
             <div
               key={file.id}
-              className="py-2 border-t-2 md:border-2 border-gray-800 border-opacity-50"
+              className="py-2 neu"
             >
-              <p className="font-semibold mt-4 mb-2 pl-4 text-gray-200">
+              <p className="font-semibold mt-4 mb-2 pl-4 text-blue-950">
                 {file.original_name}
               </p>
               {renderFilePreview(file)} {/* Render preview */}
@@ -295,13 +295,13 @@ const MyFiles = () => {
         <div className="flex justify-between">
           <button
             onClick={handleDeleteConfirmation}
-            className="bg-red-400 text-white py-2 px-4 rounded"
+            className="bg-red-950 text-white mt-2 px-6 py-2 rounded-3xl"
           >
             Delete
           </button>
           <button
             onClick={() => setIsDeleteConfirmationVisible(false)}
-            className="bg-gray-300 text-black py-2 px-4 rounded"
+            className="bg-gray-950 text-white mt-2 px-6 py-2 rounded-3xl"
           >
             Cancel
           </button>
