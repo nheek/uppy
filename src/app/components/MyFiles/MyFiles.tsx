@@ -206,7 +206,7 @@ const MyFiles = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-2 px-4">
           {files.map((file) => (
-            <div key={file.id} className="py-2 neu">
+            <div key={file.id} className="py-2">
               <p className="font-semibold mt-4 mb-2 pl-4 text-blue-950">
                 {file.original_name}
               </p>
