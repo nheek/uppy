@@ -8,7 +8,7 @@ services:
       - postgres
     env_file:
       - .env
-    image: "nheek/uppy:latest"
+    image: "reg.nheek.com/nheek/uppy:latest"
     volumes:
       - uploads:/usr/src/app/public/uploads
 

@@ -22,13 +22,12 @@ jobs:
           echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
           echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
           echo "POSTGRES_URL=${{ secrets.POSTGRES_URL }}" >> .env
-          echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> .env
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
           echo "DOMAIN=${{ secrets.DOMAIN }}" >> .env
 
       - name: Build and Push Docker Images
         run: |
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+          echo "${{ secrets.REG_PASSWORD }}" | docker login ${{ secrets.REG_REGISTRY }} -u ${{ secrets.REG_USERNAME }} --password-stdin
           docker compose build
           docker compose push
 
@@ -48,7 +47,6 @@ jobs:
             echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
             echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
             echo "POSTGRES_URL=${{ secrets.POSTGRES_URL }}" >> .env
-            echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> .env
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
             echo "DOMAIN=${{ secrets.DOMAIN }}" >> .env
             curl -O -L https://raw.githubusercontent.com/nheek/uppy/main/Dockerfile
