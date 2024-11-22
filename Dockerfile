@@ -1,15 +1,27 @@
-FROM node:21-alpine AS build
-WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm install
+FROM alpine:3.19 AS base
+WORKDIR /app
+ENV NODE_ENV="production"
+
+# ===========================
+# Build Stage
+# ===========================
+FROM base AS build
+RUN apk -U add build-base gyp pkgconfig python3 nodejs npm
+COPY package.json ./
+RUN npm install --package-lock-only
+RUN npm ci --include=dev
 COPY . .
 RUN npm run build
+RUN npm prune --omit=dev
 
-FROM node:21-alpine AS production
-WORKDIR /usr/src/app
-RUN apk --no-cache add postgresql-client
-RUN apk --no-cache add bash \
-    && wget -O /usr/local/bin/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh \
-    && chmod +x /usr/local/bin/wait-for-it.sh
-COPY --from=build /usr/src/app .
-CMD ["sh", "-c", "pg_isready -h postgres && npm run start"]
+
+# ===========================
+# Runtime Stage
+# ===========================
+FROM base AS run
+RUN apk add --no-cache nodejs
+COPY --from=build /app/.next/standalone /app
+COPY --from=build /app/.next/static /app/.next/static
+COPY --from=build /app/public /app/public
+EXPOSE 3000
+CMD ["node", "server.js"]

@@ -1,26 +1,14 @@
 services:
-  node-app:
+  uppy:
     build: .
     restart: unless-stopped
     ports:
       - "3034:3000"
-    depends_on:
-      - postgres
     env_file:
       - .env
-    image: "nheek/uppy:latest"
+    image: "reg.nheek.com/nheek/uppy:latest"
     volumes:
       - uploads:/usr/src/app/public/uploads
 
-  postgres:
-    image: postgres:17
-    restart: unless-stopped
-    env_file:
-      - .env
-    volumes:
-      - postgres_db_data:/var/lib/postgresql/data
-      - .sql_data:/docker-entrypoint-initdb.d/
-
 volumes:
-  postgres_db_data:
   uploads:
